@@ -11,6 +11,6 @@ func init() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	host, _ := os.Hostname()
 	log.Logger = log.With().Str("host", host).Logger()
-	log.Logger = log.With().Str("MDS", "e-commerce").Logger()
+	log.Logger = log.With().Str("XM", "Task").Logger()
 	log.Logger = log.With().Caller().Logger()
 }
