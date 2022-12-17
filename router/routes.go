@@ -20,6 +20,7 @@ type routerImp struct {
 }
 
 func (r *routerImp) SetRouter() *gin.Engine {
+	r.setUserRoutes()
 	r.setCompanyRoutes()
 	return r.engine
 }

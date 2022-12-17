@@ -38,3 +38,11 @@ func GetCompany(db *gorm.DB, id string) (models.Company, error) {
 	err := db.Where("id = ?", id).First(&company).Error
 	return company, err
 }
+
+func CreateUser(db *gorm.DB, user models.User) models.User {
+	err := db.Create(&user).Error
+	if err != nil {
+		panic(err.Error())
+	}
+	return user
+}

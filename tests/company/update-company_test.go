@@ -8,6 +8,7 @@ import (
 	"github.com/MahmoudMekki/XM-Task/pkg/models"
 	"github.com/MahmoudMekki/XM-Task/tests/database"
 	"github.com/MahmoudMekki/XM-Task/tests/server"
+	"github.com/MahmoudMekki/XM-Task/utils"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -33,7 +34,27 @@ func TestUpdateCompanyHandler(t *testing.T) {
 		Registered:   true,
 		Type:         "NonProfit",
 	}
+	user := models.User{
+		UserName: "test",
+		Email:    "test@test.com",
+		Password: "test",
+	}
+	user = database.CreateUser(db, user)
 	company = database.CreateCompany(db, company)
+	t.Run("un authorized update company successfully", func(t *testing.T) {
+		payload := models.Company{
+			Name:         "Mahmoud",
+			EmployeesNum: 1000,
+			Description:  "welcome to my company",
+		}
+		jsonVal, _ := json.Marshal(payload)
+
+		w := httptest.NewRecorder()
+		req, _ := http.NewRequest("PATCH", fmt.Sprintf("/company/%s", company.Id), bytes.NewBuffer(jsonVal))
+		r.ServeHTTP(w, req)
+		assert.Equal(t, http.StatusUnauthorized, w.Code)
+
+	})
 	t.Run("update company successfully", func(t *testing.T) {
 		payload := models.Company{
 			Name:         "Mahmoud",
@@ -44,6 +65,8 @@ func TestUpdateCompanyHandler(t *testing.T) {
 
 		w := httptest.NewRecorder()
 		req, _ := http.NewRequest("PATCH", fmt.Sprintf("/company/%s", company.Id), bytes.NewBuffer(jsonVal))
+		token := utils.GenerateToken(user.Id)
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 		r.ServeHTTP(w, req)
 		assert.Equal(t, http.StatusOK, w.Code)
 		companyUpdated, err := database.GetCompany(db, company.Id.String())
