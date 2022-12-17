@@ -33,3 +33,8 @@ func CreateCompany(db *gorm.DB, company models.Company) models.Company {
 	}
 	return company
 }
+func GetCompany(db *gorm.DB, id string) (models.Company, error) {
+	var company models.Company
+	err := db.Where("id = ?", id).First(&company).Error
+	return company, err
+}
