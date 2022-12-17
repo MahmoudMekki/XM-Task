@@ -1,5 +1,17 @@
 version: '3.3'
 services:
+  app:
+    container_name: XM-Task
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - api:/usr/src/app/
+    depends_on:
+      - db-dev
+    networks:
+      - XM-API
   db-dev:
     image: mysql:latest
     restart: always
@@ -29,5 +41,9 @@ services:
     volumes:
       - xm-test:/var/lib/mysql
 volumes:
+  api:
   xm-db:
   xm-test:
+networks:
+    XM-API:
+      driver: bridge
