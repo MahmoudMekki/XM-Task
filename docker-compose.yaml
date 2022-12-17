@@ -9,23 +9,26 @@ services:
     volumes:
       - api:/usr/src/app/
     depends_on:
-      - db-dev
+      - XM-mysql
     networks:
       - XM-API
-  db-dev:
+  XM-mysql:
     image: mysql:latest
     restart: always
     environment:
-      MYSQL_DATABASE: 'XM'
-      MYSQL_USER: 'Test'
-      MYSQL_PASSWORD: '24072017'
-      MYSQL_ROOT_PASSWORD: '24072017'
+      - MYSQL_ROOT_HOST=${DB_HOST}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     ports:
       - '3306:3306'
     expose:
       - '3306'
     volumes:
      - xm-db:/var/lib/mysql
+    networks:
+     - XM-API
   db-test:
     image: mysql:latest
     restart: always

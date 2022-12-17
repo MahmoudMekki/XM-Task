@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"github.com/MahmoudMekki/XM-Task/config"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/mysql"
@@ -10,11 +11,22 @@ import (
 
 var dbConn *gorm.DB
 
+func dsn() (dsn string) {
+	dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True",
+		config.GetEnvVar("DB_USER"),
+		config.GetEnvVar("DB_PASSWORD"),
+		config.GetEnvVar("DB_HOST"),
+		config.GetEnvVar("DB_PORT"),
+		config.GetEnvVar("DB_NAME"),
+	)
+	return dsn
+}
+
 func CreateDBConnection() error {
 	if dbConn != nil {
 		CloseDBConnection(dbConn)
 	}
-	dsn := config.GetEnvVar("DB_URL")
+	dsn := dsn()
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal().Msg(err.Error())
