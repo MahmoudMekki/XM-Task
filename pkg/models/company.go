@@ -1,21 +1,18 @@
 package models
 
-type companyType string
+import "github.com/google/uuid"
 
 const (
-	CompaniesTableName             = "companies"
-	Corporations       companyType = "Corporations"
-	NonProfit          companyType = "NonProfit"
-	Cooperative        companyType = "Cooperative"
-	SoleProprietorship companyType = "Sole Proprietorship"
+	CompaniesTableName = "companies"
 )
 
 type Company struct {
-	Id           string      `gorm:"column:id;type:uuid;default:uuid_generate_v4();primary_key"`
-	Name         string      `gorm:"column:name;varchar(20);not null;unique"`
-	Description  string      `gorm:"column:description;varchar(3000); null"`
-	EmployeesNum int64       `gorm:"column:employees_number; not null"`
-	Type         companyType `gorm:"column:type;type:enum('Corporations', 'NonProfit', 'Cooperative','Sole Proprietorship');not null"`
+	Id           uuid.UUID `gorm:"column:id;varchar(16);primary_key" json:"id"`
+	Name         string    `gorm:"column:name;varchar(20);not null;unique" json:"name"`
+	Description  string    `gorm:"column:description;varchar()" json:"description"`
+	EmployeesNum int64     `gorm:"column:employees_number; not null" json:"employees_number"`
+	Registered   bool      `gorm:"column:registered; not null" json:"registered"`
+	Type         string    `gorm:"column:type;type:enum('Corporations', 'NonProfit', 'Cooperative','Sole Proprietorship');not null" json:"type"`
 }
 
 func (c *Company) TableName() string {

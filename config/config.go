@@ -1,26 +1,26 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
+	"os"
 )
 
-func init() {
-	viper.SetConfigFile(".env")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Debug().Err(err).
-			Msg("Error occurred while reading env file, might fallback to OS env config")
-	}
-	viper.AutomaticEnv()
-}
-
 func GetEnvVar(name string) string {
-	if !viper.IsSet(name) {
-		log.Debug().Msgf("Environment variable %s is not set", name)
+	env := os.Getenv("ENV")
+	envMap, err := godotenv.Read(".env")
+	if env == "test" {
+		envMap, err = godotenv.Read("../../.env.test")
+	}
+
+	if err != nil {
+		log.Debug().Msg("Error reading .env file")
 		return ""
 	}
-	value := viper.GetString(name)
+	value, ok := envMap[name]
+	if !ok {
+		log.Debug().Msg("Error reading env var")
+		return ""
+	}
 	return value
 }

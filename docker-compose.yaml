@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  db-dev:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'XM'
+      MYSQL_USER: 'Test'
+      MYSQL_PASSWORD: '24072017'
+      MYSQL_ROOT_PASSWORD: '24072017'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+     - xm-db:/var/lib/mysql
+  db-test:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'XM'
+      MYSQL_USER: 'Test'
+      MYSQL_PASSWORD: '24072017'
+      MYSQL_ROOT_PASSWORD: '24072017'
+    ports:
+      - '3307:3306'
+    expose:
+      - '3307'
+    volumes:
+      - xm-test:/var/lib/mysql
+volumes:
+  xm-db:
+  xm-test:
