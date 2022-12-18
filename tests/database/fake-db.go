@@ -19,7 +19,7 @@ func DbSetup() {
 	migration.RunMigration()
 }
 func CleanUpDb(db *gorm.DB) {
-	err := db.Migrator().DropTable(&models.Company{}, &models.User{}, &Migrations{})
+	err := db.Migrator().DropTable(&models.Company{}, &models.User{}, &models.Log{}, &Migrations{})
 	if err != nil {
 		panic(err.Error())
 	}
