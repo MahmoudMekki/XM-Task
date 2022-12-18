@@ -11,6 +11,7 @@ func RunMigration() {
 	var system []*gormigrate.Migration
 	system = append(system, listCompanies()...)
 	system = append(system, listUsers()...)
+	system = append(system, listLogs()...)
 	dbConn, err := database.GetDatabaseConnection()
 	if err != nil {
 		log.Fatal().Msg(err.Error())

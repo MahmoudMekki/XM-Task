@@ -1,6 +1,9 @@
 package models
 
-const UsersTableName = "users"
+const (
+	UsersTableName  = "users"
+	CreateUserEvent = "create_user"
+)
 
 type User struct {
 	Id       int64  `gorm:"column:id; primary_key;auto_increment" json:"id"`

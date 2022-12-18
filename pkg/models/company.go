@@ -4,6 +4,9 @@ import "github.com/google/uuid"
 
 const (
 	CompaniesTableName = "companies"
+	CreateCompanyEvent = "create_company"
+	UpdateCompanyEvent = "update_company"
+	DeleteCompanyEvent = "delete_company"
 )
 
 type Company struct {

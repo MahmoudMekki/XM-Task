@@ -1,6 +1,8 @@
 package company
 
 import (
+	"encoding/json"
+	"github.com/MahmoudMekki/XM-Task/pkg/kafka"
 	"github.com/MahmoudMekki/XM-Task/pkg/models"
 	"github.com/MahmoudMekki/XM-Task/pkg/repo/companyDAL"
 	"github.com/gin-gonic/gin"
@@ -24,5 +26,14 @@ func UpdateCompany(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	companyobj, _ := json.Marshal(company)
+	log := models.Log{
+		UserId:   int64(ctx.GetFloat64("user_id")),
+		Activity: models.UpdateCompanyEvent,
+		Data:     companyobj,
+	}
+	logObj, _ := json.Marshal(log)
+
+	kafka.Produce(models.ActivityLogTopic, logObj)
 	ctx.JSON(http.StatusOK, gin.H{"id": ctx.GetString("id")})
 }
