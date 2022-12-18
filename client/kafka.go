@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"github.com/MahmoudMekki/XM-Task/config"
 	"github.com/Shopify/sarama"
 	"github.com/rs/zerolog/log"
@@ -13,7 +14,8 @@ func establishKafkaProducer() {
 	var err error
 	prodConfig := sarama.NewConfig()
 	prodConfig.Producer.Return.Successes = true
-	producer, err = sarama.NewSyncProducer([]string{config.GetEnvVar("BROKER_URL")}, prodConfig)
+	url := fmt.Sprintf("%s:%s", config.GetEnvVar("BROKER_HOST"), config.GetEnvVar("BROKER_PORT"))
+	producer, err = sarama.NewSyncProducer([]string{url}, prodConfig)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to establish connection with Kafka")
 	}
@@ -21,7 +23,9 @@ func establishKafkaProducer() {
 func establishKafkaConsumer() {
 	var err error
 	consumerConfig := sarama.NewConfig()
-	consumer, err = sarama.NewConsumer([]string{config.GetEnvVar("BROKER_URL")}, consumerConfig)
+	url := fmt.Sprintf("%s:%s", config.GetEnvVar("BROKER_HOST"), config.GetEnvVar("BROKER_PORT"))
+	log.Info().Msg(url)
+	consumer, err = sarama.NewConsumer([]string{url}, consumerConfig)
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to establish connection with Kafka")
 	}

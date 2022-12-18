@@ -69,13 +69,11 @@ curl --location --request DELETE 'localhost:8080/company/5f3a5f08-53a6-4ee8-8327
 ```
 # Golang SDK >= 1.17
 ```bash
-> docker build ./
 > docker-compose up [runinng mysql testing server]
 > go test tests/companies/* [tests]
 ```
 
 ## Run the system on docker
 ```bash
-> docker build ./ [runinng mysql and application containers]
 > docker-compose up 
 ```
